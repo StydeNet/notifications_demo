@@ -1,27 +1,66 @@
-# Laravel PHP Framework
+# Notifications Demo
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+Este repositorio es el resultado de las lecciones del [curso de Novedades en Laravel 5.3](https://styde.net/curso-de-novedades-en-laravel-5-3/) de [Styde.net](https://styde.net/) donde se explica cómo trabajar con el nuevo sistema de notificaciones de Laravel 5.3 usando el canal base de datos:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+* [Notificaciones con el canal base de datos, parte 1](https://styde.net/uso-del-sistema-de-notificaciones-en-la-base-de-datos-en-laravel-5-3-parte-1/) - 24:23
+* [Notificaciones con el canal base de datos, parte 2](https://styde.net/uso-de-sistema-de-notificaciones-en-la-base-de-datos-en-laravel-5-3-parte-2/) - 17:23
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+> Esta aplicación es una demostración del sistema de notificaciones de Laravel y se ofrece solo como una demostración con fines educativos.
 
-## Official Documentation
+## Instalación
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+Realiza los siguientes pasos:
 
-## Contributing
+1. Clonar o descargar este repositorio.
+2. Instalar las dependencias de Composer con `composer install`.
+3. Crea el archivo .env y agrega las credenciales de base de datos.
+4. [Configura el envío de emails de prueba con Mailtrap.io](https://styde.net/como-enviar-emails-de-prueba-con-mailtrap-io-en-laravel/)
+5. Generar una API key para la aplicación con `php artisan key:generate`
+6. Ejecuta las migraciones y seeders con `php artisan migrate --seed`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+## Uso
 
-## Security Vulnerabilities
+Este demo tiene 2 tipos de notificaciones:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+* `App\Notifications\Follower` que envía una notificación a un usuario cuando tiene un nuevo seguidor.  
+* `App\Notifications\PostCommented` que envía una notificación a los usuarios suscritos de un post en específico. Para efectos de este demo los usuarios suscritos a un post son los 5 primeros usuarios de la base de datos generados por el seeder.
 
-## License
+Para probar el sistema de notificaciones:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+1. Ejecuta `php artisan serve` y navega a [http://localhost:8000](http://localhost:8000)
+
+2. Inicia sesión con email `admin@styde.net` y contraseña `secret`
+
+4. Puedes generar notificaciones de tipo `Follower` con la URL [http://localhost:8000/follow/8/1](http://localhost:8000/follow/8/1) donde 8 es el `id` del usuario seguidor y 1 es el `id` del usuario seguido. 
+
+5. Para generar una notificación  de tipo `PostCommented` visita [http://localhost:8000/comment/1](http://localhost:8000/comment/1) donde 1 es el `id` del post.  Esta notificación tarda en ejecutarse pues envia 1 email a cada usuario suscrito al post.
+
+6. Revisa las notificaciones que ha recibido el usuario conectado en [http://localhost:8000/notifications](http://localhost:8000/notifications)
+
+
+### [Styde](https://styde.net/)
+
+Styde es una comunidad de desarrollo web en español. Con nosotros podrás aprender Laravel, PHP y otras tecnologías, desde tutoriales básicos gratuitos hasta cursos avanzados a bajo costo, de la mano de profesionales con años de experiencia.
+
+### Otros cursos
+
+**Laravel desde cero**
+ -   [Primeros pasos con Laravel 5.*](https://styde.net/curso-primeros-pasos-con-laravel-5/)
+ -   [Curso de Laravel 5.1](https://styde.net/curso-introductorio-laravel-5-1/)
+ -   [Crea una aplicación con Laravel 5](https://styde.net/curso-crea-aplicaciones-con-laravel-5/)
+ -   [Curso básico de Eloquent ORM](https://styde.net/curso-basico-de-eloquent-orm-con-laravel-5-1/)
+
+
+**Laravel y PHP avanzado**
+ -   [Curso de administración de servidores para PHP y Laravel](https://styde.net/curso-configuracion-administracion-de-servidores-php-laravel/)
+ -   [Curso avanzado de Eloquent ORM](https://styde.net/curso-avanzado-de-eloquent-orm/)
+ -   [Crea componentes para PHP](https://styde.net/curso-crea-componentes-para-php-y-laravel/)
+ -   [Interfaces dinámicas con Laravel y jQuery](https://styde.net/curso-de-interfaces-dinamicas-con-laravel-y-jquery/)
+
+**Otras tecnologías**
+-   [Curso de Gulp](https://styde.net/curso-gulp-y-herramientas-de-automatizacion/)
+-   [Curso de Vue.js](https://styde.net/curso-de-vue-js/)
+-	[Curso de Sass](https://styde.net/curso-de-sass/)
+-	[Curso básico de Swift](https://styde.net/curso-basico-de-swift/)
+
+© 2016 [Styde.net](https://styde.net/)

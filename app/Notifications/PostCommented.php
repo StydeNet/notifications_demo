@@ -2,23 +2,29 @@
 
 namespace App\Notifications;
 
+use App\Post;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class PostCommented extends Notification
 {
     use Queueable;
 
     /**
+     * @var $post
+     */
+    private $post;
+
+    /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Post $post)
     {
-        //
+        $this->post = $post;
     }
 
     /**
@@ -29,7 +35,7 @@ class PostCommented extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return $notifiable->getNotificationPreferences();
     }
 
     /**
@@ -55,7 +61,9 @@ class PostCommented extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'post_id' => $this->post->id,
+            'post_title' => $this->post->title,
+            'redirect_url' => 'posts/'.$this->post->id
         ];
     }
 }

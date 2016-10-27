@@ -1,8 +1,10 @@
 <?php
 
+use App\DatabaseNotification;
 use App\Notifications\Follower;
+use App\Notifications\PostCommented;
+use App\Post;
 use App\User;
-use Illuminate\Notifications\DatabaseNotification;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +32,12 @@ Route::get('follow/{follower}/{followed}', function (User $follower, User $follo
     Notification::send($followed, new Follower($follower));
 });
 
+Route::get('comment/{post}', function (Post $post) {
+    // Write comment...
+
+    Notification::send($post->subscribers, new PostCommented($post));
+});
+
 Route::group(['middleware' => 'auth'], function () {
     
     Route::get('notifications', function () {
@@ -39,25 +47,27 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::get('notifications/read-all', function () {
-        auth()->user()->notifications->markAsRead();
+        auth()->user()->unreadNotifications->markAsRead();
 
         return back();
     });
 
     Route::get('notifications/{notification}', function (DatabaseNotification $notification) {
         
-        abort_unless($notification->notifiable_id == auth()->id()
-            && $notification->notifiable_type =='App\User', 404);
+        abort_unless($notification->associatedTo(auth()->user()), 404);
 
         $notification->markAsRead();
 
-        switch ($notification->type) {
-            case 'App\Notifications\Follower':
-                return redirect('profile/'.$notification->data['follower_id']);
-        }
+        return redirect($notification->redirect_url);
     });
 
-    Route::get('profile/{user}', function (User $user) {
-        dd($user);
-    });
+
+});
+
+Route::get('profile/{user}', function (User $user) {
+    dd($user);
+});
+
+Route::get('posts/{post}', function (Post $post) {
+    dd($post);
 });

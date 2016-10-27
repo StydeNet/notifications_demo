@@ -62,6 +62,7 @@ class Follower extends Notification
         return [
             'follower_id' => $this->follower->id,
             'follower_name' => $this->follower->name,
+            'redirect_url' => url('profile/'.$this->follower->id),
         ];
     }
 }

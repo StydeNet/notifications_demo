@@ -2,12 +2,13 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
+use App\Post;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\RoutesNotifications;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use RoutesNotifications, HasDatabaseNotifications;
 
     /**
      * The attributes that are mass assignable.
@@ -26,4 +27,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function getNotificationPreferences()
+    {
+        return ['mail', 'database'];
+    }
 }
